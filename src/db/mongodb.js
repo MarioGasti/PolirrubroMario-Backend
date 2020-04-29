@@ -101,8 +101,8 @@ exports.findAll = (req, res) => {
 
 exports.insert = (req, res) => {
     conn(DB, _ => {
-        console.log(req.params);
-        console.log(req.body);
+        // console.log(req.params);
+        // console.log(req.body);
         db.collection(req.params.collection).insertOne(
             req.body.object, (err, dbResult) => {
                 if (err) res.status(400).json({
