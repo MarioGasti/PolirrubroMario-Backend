@@ -58,7 +58,8 @@ exports.authenticate = (req, res) => {
                     auth: result,
                     status: 200,
                     httpStatus: 200,
-                    message: `Usuario ${ req.body.user } ingresó con éxito.`
+                    message: `Usuario ${ req.body.user } ingresó con éxito.`,
+                    username: req.body.user
                 });
                 else return res.status(500).json({
                     ok: result,
