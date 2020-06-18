@@ -81,9 +81,10 @@ exports.find = (req, res) => {
 };
 
 exports.findQuery = (req, res) => {
-    console.log(req.params._id);
+    const query = {
+        [req.params.key]: req.params.value };
     conn(DB, _ => {
-        db.collection(req.params.collection).find({ '_id': req.params._id }).toArray((err, dbResult) => {
+        db.collection(req.params.collection).find(query).toArray((err, dbResult) => {
             if (err) res.status(400).json({
                 ok: false,
                 status: 400,

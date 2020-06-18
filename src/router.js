@@ -8,7 +8,7 @@ const valid = require('./valid');
 
 router.post('/', mongodb.test);
 router.get('/find/:collection', mongodb.find);
-router.get('/findQuery/:collection/:_id', mongodb.findQuery);
+router.get('/findQuery/:collection/:key/:value', mongodb.findQuery);
 router.get('/findAll/:collection', mongodb.findAll);
 router.post('/insert/:collection', mongodb.insert);
 router.post('/login/signup', [valid.missingSignUpData], login.signup);
