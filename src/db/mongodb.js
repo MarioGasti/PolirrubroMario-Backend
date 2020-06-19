@@ -1,4 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
+const { ObjectID } = require('mongodb');
 const crypto = require('crypto');
 const path = require('path');
 
@@ -82,7 +83,8 @@ exports.find = (req, res) => {
 
 exports.findQuery = (req, res) => {
     const query = {
-        [req.params.key]: req.params.value };
+        [req.params.key]: req.params.value
+    };
     conn(DB, _ => {
         db.collection(req.params.collection).find(query).toArray((err, dbResult) => {
             if (err) res.status(400).json({
@@ -91,12 +93,38 @@ exports.findQuery = (req, res) => {
                 httpStatus: 400,
                 err
             });
-            else res.status(200).json({
-                ok: true,
-                status: 200,
-                httpStatus: 200,
-                dbResult
-            });
+            else {
+                if (dbResult.length > 0)
+                    res.status(200).json({
+                        ok: true,
+                        status: 200,
+                        httpStatus: 200,
+                        dbResult
+                    });
+                else {
+                    const query = {
+                        [req.params.key]: ObjectID(req.params.value)
+                    };
+                    conn(DB, _ => {
+                        db.collection(req.params.collection).find(query).toArray((err, dbResult) => {
+                            if (err) res.status(400).json({
+                                ok: false,
+                                status: 400,
+                                httpStatus: 400,
+                                err
+                            });
+                            else {
+                                res.status(200).json({
+                                    ok: true,
+                                    status: 200,
+                                    httpStatus: 200,
+                                    dbResult
+                                });
+                            }
+                        });
+                    });
+                }
+            }
         });
     });
 };
