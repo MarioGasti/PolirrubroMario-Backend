@@ -184,12 +184,38 @@ exports.put = (req, res) => {
                 httpStatus: 400,
                 err
             });
-            else res.status(200).json({
-                ok: true,
-                status: 200,
-                httpStatus: 200,
-                dbResult
-            });
+            else if (dbResult.n > 0)
+                res.status(200).json({
+                    ok: true,
+                    status: 200,
+                    httpStatus: 200,
+                    dbResult
+                });
+            else {
+                conn(DB, _ => {
+                    db.collection(req.params.collection).updateOne({ '_id': ObjectID(req.params._id) }, { '$set': req.body.object /* { 'quantity': 11, 'sellprice': 25 } */ }, (err, dbResult) => {
+                        if (err) res.status(400).json({
+                            ok: false,
+                            status: 400,
+                            httpStatus: 400,
+                            err
+                        });
+                        else if (dbResult.n > 0)
+                            res.status(200).json({
+                                ok: true,
+                                status: 200,
+                                httpStatus: 200,
+                                dbResult
+                            });
+                        else res.status(400).json({
+                            ok: false,
+                            status: 400,
+                            httpStatus: 400,
+                            message: 'Couldn\'t update.'
+                        });
+                    });
+                });
+            }
             console.log(dbResult);
         });
     });
