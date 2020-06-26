@@ -200,18 +200,11 @@ exports.put = (req, res) => {
                             httpStatus: 400,
                             err
                         });
-                        else if (dbResult.n > 0)
-                            res.status(200).json({
-                                ok: true,
-                                status: 200,
-                                httpStatus: 200,
-                                dbResult
-                            });
-                        else res.status(400).json({
-                            ok: false,
-                            status: 400,
-                            httpStatus: 400,
-                            message: 'Couldn\'t update.'
+                        else res.status(200).json({
+                            ok: true,
+                            status: 200,
+                            httpStatus: 200,
+                            dbResult
                         });
                     });
                 });
