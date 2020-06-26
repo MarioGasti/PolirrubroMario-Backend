@@ -7,7 +7,7 @@ const url = 'mongodb://admin:admin123@ds339648.mlab.com:39648/polirrubromario';
 const DB = 'polirrubromario';
 
 const conn = (dbToUse, cb) => {
-    /// console.log('object');
+    // console.log('object');
     MongoClient.connect(url, { useUnifiedTopology: true }, (err, database) => {
         if (err) return console.log(err);
         else {
