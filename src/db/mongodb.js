@@ -105,23 +105,28 @@ exports.findQuery = (req, res) => {
                     const query = {
                         [req.params.key]: ObjectID(req.params.value)
                     };
-                    conn(DB, _ => {
-                        db.collection(req.params.collection).find(query).toArray((err, dbResult) => {
-                            if (err) res.status(400).json({
-                                ok: false,
-                                status: 400,
-                                httpStatus: 400,
-                                err
-                            });
-                            else {
-                                res.status(200).json({
+                    if (req.params.value.length === 12 || req.params.value.length === 24)
+                        conn(DB, _ => {
+                            db.collection(req.params.collection).find(query).toArray((err, dbResult) => {
+                                if (err) res.status(400).json({
+                                    ok: false,
+                                    status: 400,
+                                    httpStatus: 400,
+                                    err
+                                });
+                                else res.status(200).json({
                                     ok: true,
                                     status: 200,
                                     httpStatus: 200,
                                     dbResult
                                 });
-                            }
+                            });
                         });
+                    else res.status(200).json({
+                        ok: true,
+                        status: 200,
+                        httpStatus: 200,
+                        dbResult
                     });
                 }
             }
@@ -193,19 +198,26 @@ exports.put = (req, res) => {
                 });
             else {
                 conn(DB, _ => {
-                    db.collection(req.params.collection).updateOne({ '_id': ObjectID(req.params._id) }, { '$set': req.body.object /* { 'quantity': 11, 'sellprice': 25 } */ }, (err, dbResult) => {
-                        if (err) res.status(400).json({
-                            ok: false,
-                            status: 400,
-                            httpStatus: 400,
-                            err
+                    if (req.params.value.length === 12 || req.params.value.length === 24)
+                        db.collection(req.params.collection).updateOne({ '_id': ObjectID(req.params._id) }, { '$set': req.body.object /* { 'quantity': 11, 'sellprice': 25 } */ }, (err, dbResult) => {
+                            if (err) res.status(400).json({
+                                ok: false,
+                                status: 400,
+                                httpStatus: 400,
+                                err
+                            });
+                            else res.status(200).json({
+                                ok: true,
+                                status: 200,
+                                httpStatus: 200,
+                                dbResult
+                            });
                         });
-                        else res.status(200).json({
-                            ok: true,
-                            status: 200,
-                            httpStatus: 200,
-                            dbResult
-                        });
+                    else res.status(200).json({
+                        ok: true,
+                        status: 200,
+                        httpStatus: 200,
+                        dbResult
                     });
                 });
             }
