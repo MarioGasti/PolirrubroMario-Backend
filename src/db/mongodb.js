@@ -102,10 +102,11 @@ exports.findQuery = (req, res) => {
                         dbResult
                     });
                 else {
-                    const query = {
-                        [req.params.key]: ObjectID(req.params.value)
-                    };
-                    if (req.params.value.length === 12 || req.params.value.length === 24)
+                    if (req.params.value.length === 12 || req.params.value.length === 24) {
+
+                        const query = {
+                            [req.params.key]: ObjectID(req.params.value)
+                        };
                         conn(DB, _ => {
                             db.collection(req.params.collection).find(query).toArray((err, dbResult) => {
                                 if (err) res.status(400).json({
@@ -122,7 +123,7 @@ exports.findQuery = (req, res) => {
                                 });
                             });
                         });
-                    else res.status(200).json({
+                    } else res.status(200).json({
                         ok: true,
                         status: 200,
                         httpStatus: 200,
