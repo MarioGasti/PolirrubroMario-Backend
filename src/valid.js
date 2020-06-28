@@ -47,18 +47,6 @@ exports.missingSignUpData = (req, res, next) => {
             'lastname = "Ferrufino"',
         ]
     });
-    if (!req.body.genre) return res.status(404).json({
-        ok: false,
-        status: 404,
-        httpStatus: 404,
-        message: 'Elija Sexo.',
-        references: [
-            'genre of the person who wants to sign up.'
-        ],
-        examples: [
-            'genre = "M"',
-        ]
-    });
     if (!req.body.age) return res.status(404).json({
         ok: false,
         status: 404,
@@ -97,17 +85,5 @@ exports.missingSignUpData = (req, res, next) => {
             'email = "mario2647@hotmail.com"',
         ]
     });
-    // if (!req.body.email) return res.status(404).json({
-    //     ok: false,
-    //     status: 404,
-    //     httpStatus: 404,
-    //     message: 'email is needed at body.',
-    //     references: [
-    //         'email of the person who wants to sign up.'
-    //     ],
-    //     examples: [
-    //         'email = "mario2647@hotmail.com"',
-    //     ]
-    // });
     next();
 };
