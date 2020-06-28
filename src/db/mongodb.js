@@ -199,7 +199,7 @@ exports.put = (req, res) => {
                 });
             else {
                 conn(DB, _ => {
-                    if (req.params.value.length === 12 || req.params.value.length === 24)
+                    if (req.params._id.length === 12 || req.params._id.length === 24)
                         db.collection(req.params.collection).updateOne({ '_id': ObjectID(req.params._id) }, { '$set': req.body.object /* { 'quantity': 11, 'sellprice': 25 } */ }, (err, dbResult) => {
                             if (err) res.status(400).json({
                                 ok: false,
