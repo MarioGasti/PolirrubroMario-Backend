@@ -288,7 +288,8 @@ exports.signup = (user, pass, data, cb) => {
                     age: data.age,
                     address: data.address,
                     phone: data.phone,
-                    email: data.email
+                    email: data.email,
+                    oneSignalId: data.oneSignalId
                 }, (err2, dbResult2) => {
                     if (err2) return cb(err2);
                     else return cb(null, dbResult2);
