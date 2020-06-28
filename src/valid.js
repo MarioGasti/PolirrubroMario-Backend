@@ -53,7 +53,7 @@ exports.missingSignUpData = (req, res, next) => {
         httpStatus: 404,
         message: 'Ingrese su edad.',
         references: [
-            'age of the person who wants to sign up.'
+            'age of the person who wants to sign up.' //
         ],
         examples: [
             'age = 49',
