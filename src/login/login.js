@@ -13,11 +13,11 @@ exports.signup = (req, res) => {
         else db.signup(req.body.user, hash, {
             firstname: req.body.firstname,
             lastname: req.body.lastname,
-            genre: req.body.genre,
             age: req.body.age,
             address: req.body.address,
             phone: req.body.phone,
-            email: req.body.email
+            email: req.body.email,
+            oneSignalId: req.body.oneSignalId
         }, (err, data) => {
             if (err) return res.status(500).json({
                 ok: false,

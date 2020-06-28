@@ -1,5 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const { ObjectID } = require('mongodb');
+const oneSignal = require('../push/oneSignal');
 const crypto = require('crypto');
 const path = require('path');
 
@@ -159,7 +160,7 @@ exports.insert = async(req, res) => {
     if (req.files) req.body.object.filename = await uploadImage(req.files.image, res);
     conn(DB, _ => {
         db.collection(req.params.collection).insertOne(
-            req.body.object, (err, dbResult) => {
+            req.body.object, async(err, dbResult) => {
                 if (res) {
                     if (err) res.status(400).json({
                         ok: false,
@@ -168,13 +169,27 @@ exports.insert = async(req, res) => {
                         err,
                         result: 'error'
                     });
-                    else res.status(200).json({
-                        ok: true,
-                        status: 200,
-                        httpStatus: 200,
-                        dbResult,
-                        result: 'success'
-                    });
+                    else {
+                        res.status(200).json({
+                            ok: true,
+                            status: 200,
+                            httpStatus: 200,
+                            dbResult,
+                            result: 'success'
+                        });
+                        if (req.params.collection === 'Orders') {
+                            oneSignal.postByTag({
+                                method: 'POST',
+                                params: {
+                                    tag: 'admins'
+                                },
+                                body: {
+                                    headings: '¡Hay un nuevo pedido!',
+                                    content: `De ${ req.body.object.username }`
+                                }
+                            });
+                        }
+                    }
                 }
             });
     });
@@ -190,14 +205,27 @@ exports.put = (req, res) => {
                 httpStatus: 400,
                 err
             });
-            else if (dbResult.n > 0)
+            else if (dbResult.n > 0) {
+
                 res.status(200).json({
                     ok: true,
                     status: 200,
                     httpStatus: 200,
                     dbResult
                 });
-            else {
+                if (req.body.oneSignalId) {
+                    oneSignal.postByID({
+                        method: 'POST',
+                        params: {
+                            id: req.body.oneSignalId
+                        },
+                        body: {
+                            headings: 'Actualización de Pedido',
+                            content: `El estado de tu pedido es: ${ req.body.object.status }`
+                        }
+                    });
+                }
+            } else {
                 conn(DB, _ => {
                     if (req.params._id.length === 12 || req.params._id.length === 24)
                         db.collection(req.params.collection).updateOne({ '_id': ObjectID(req.params._id) }, { '$set': req.body.object /* { 'quantity': 11, 'sellprice': 25 } */ }, (err, dbResult) => {
