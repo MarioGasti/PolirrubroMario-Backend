@@ -206,7 +206,6 @@ exports.put = (req, res) => {
                 err
             });
             else if (dbResult.n > 0) {
-
                 res.status(200).json({
                     ok: true,
                     status: 200,
@@ -237,12 +236,28 @@ exports.put = (req, res) => {
                                 httpStatus: 400,
                                 err
                             });
-                            else res.status(200).json({
-                                ok: true,
-                                status: 200,
-                                httpStatus: 200,
-                                dbResult
-                            });
+                            else {
+                                res.status(200).json({
+                                    ok: true,
+                                    status: 200,
+                                    httpStatus: 200,
+                                    dbResult
+                                });
+                                if (req.body.oneSignalId && req.body.oneSignalId.length > 0) {
+                                    req.body.oneSignalId.forEach(id => {
+                                        oneSignal.postByID({
+                                            method: 'POST',
+                                            params: {
+                                                id
+                                            },
+                                            body: {
+                                                headings: 'Actualización de Pedido',
+                                                content: `El estado de tu pedido es: ${ req.body.object.status }`
+                                            }
+                                        });
+                                    });
+                                }
+                            }
                         });
                     else res.status(200).json({
                         ok: true,
