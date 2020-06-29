@@ -213,16 +213,18 @@ exports.put = (req, res) => {
                     httpStatus: 200,
                     dbResult
                 });
-                if (req.body.oneSignalId) {
-                    oneSignal.postByID({
-                        method: 'POST',
-                        params: {
-                            id: req.body.oneSignalId
-                        },
-                        body: {
-                            headings: 'Actualización de Pedido',
-                            content: `El estado de tu pedido es: ${ req.body.object.status }`
-                        }
+                if (req.body.oneSignalId && req.body.oneSignalId.length > 0) {
+                    req.body.oneSignalId.forEach(id => {
+                        oneSignal.postByID({
+                            method: 'POST',
+                            params: {
+                                id
+                            },
+                            body: {
+                                headings: 'Actualización de Pedido',
+                                content: `El estado de tu pedido es: ${ req.body.object.status }`
+                            }
+                        });
                     });
                 }
             } else {

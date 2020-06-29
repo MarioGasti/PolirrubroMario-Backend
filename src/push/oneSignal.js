@@ -53,7 +53,6 @@ exports.postAll = (req, res) => {
                     notification: notification,
                     error: e
                 });
-
         });
 };
 
@@ -80,11 +79,10 @@ exports.postByID = (req, res) => {
                     ok: true,
                     httpStatus: response.statusCode,
                     message: `OK ${ req.method }.`,
-                    notification: notification,
+                    notification,
                     response,
                     notificationId: response.id
                 });
-
         })
         .catch(e => {
             if (res)
@@ -94,7 +92,6 @@ exports.postByID = (req, res) => {
                     notification: notification,
                     error: e
                 });
-
         });
 };
 
