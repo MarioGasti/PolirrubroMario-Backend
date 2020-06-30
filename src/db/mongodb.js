@@ -306,7 +306,7 @@ exports.signup = (user, pass, data, cb) => {
                     address: data.address,
                     phone: data.phone,
                     email: data.email,
-                    oneSignalId: data.oneSignalId
+                    oneSignalId: [data.oneSignalId]
                 }, (err2, dbResult2) => {
                     if (err2) return cb(err2);
                     else return cb(null, dbResult2);
